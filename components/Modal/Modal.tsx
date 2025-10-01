@@ -1,4 +1,3 @@
-// src/components/Modal/Modal.tsx
 import React, { useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import css from './Modal.module.css'
@@ -29,7 +28,6 @@ export default function Modal({ onClose, children }: ModalProps) {
       role="dialog"
       aria-modal="true"
       onClick={handleBackdrop}
-      //   onClick={onClose}
     >
       <div className={css.modal}>{children}</div>
     </div>,

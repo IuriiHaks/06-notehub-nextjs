@@ -1,4 +1,3 @@
-// components/SearchBox/SearchBox.tsx
 'use client'
 
 import css from './SearchBox.module.css'

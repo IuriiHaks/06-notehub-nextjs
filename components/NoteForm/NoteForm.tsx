@@ -1,4 +1,3 @@
-// components/NoteForm/NoteForm.tsx
 'use client'
 
 import { Formik, Form, Field, ErrorMessage } from 'formik'
@@ -8,7 +7,7 @@ import type { CreateNoteRequest, NoteTag } from '@/types/note'
 
 interface Props {
   onSubmit: (payload: CreateNoteRequest) => void
-  onSuccess?: () => void // optional callback after success
+  onSuccess?: () => void
   onCancel?: () => void
 }
 
@@ -40,7 +39,6 @@ export default function NoteForm({ onSubmit, onSuccess, onCancel }: Props) {
       onSubmit={(values, { setSubmitting }) => {
         onSubmit(values)
         setSubmitting(false)
-        // resetForm should be triggered by caller upon success ideally.
         onSuccess?.()
       }}
     >

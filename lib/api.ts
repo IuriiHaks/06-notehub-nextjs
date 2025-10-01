@@ -16,7 +16,6 @@ export interface NotesResponse {
   totalPages: number
 }
 
-// Фетч списку нотаток з параметрами (search, page, perPage)
 export async function fetchNotes(
   search = '',
   page = 1,
@@ -29,7 +28,6 @@ export async function fetchNotes(
 }
 
 export async function fetchNoteById(id: string): Promise<Note> {
-  // API might return the note object directly or wrapped — adapt if needed
   const { data } = await api.get<Note>(`/notes/${id}`)
   return data
 }

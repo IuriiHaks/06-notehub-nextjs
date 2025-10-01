@@ -1,4 +1,3 @@
-// app/notes/Notes.client.tsx
 'use client'
 
 import { useState } from 'react'
