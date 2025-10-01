@@ -1,19 +1,3 @@
-// import axios from 'axios'
-// import { Note } from '../types/note'
-
-// // axios.defaults.baseURL = 'https://next-docs-api.onrender.com';
-// axios.defaults.baseURL = 'http://localhost:4000'
-
-// interface NoteResponse {
-//   notes: Note[]
-//   total: number
-// }
-
-// export const getNotes = async () => {
-//   const { data } = await axios.get<NoteResponse>('/nods')
-//   return data.notes
-// }
-
 import axios from 'axios'
 import type { Note, CreateNoteRequest } from '../types/note'
 
@@ -31,17 +15,6 @@ export interface NotesResponse {
   notes: Note[]
   totalPages: number
 }
-
-// export async function fetchNotes(
-//   search: string,
-//   page: number = 1,
-//   perPage: number = 10
-// ): Promise<NotesResponse> {
-//   const { data } = await api.get<NotesResponse>('/notes', {
-//     params: { search, page, perPage },
-//   })
-//   return data
-// }
 
 // Фетч списку нотаток з параметрами (search, page, perPage)
 export async function fetchNotes(

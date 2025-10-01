@@ -16,6 +16,7 @@ import NoteForm from '@/components/NoteForm/NoteForm'
 import Modal from '@/components/Modal/Modal'
 import { useDebouncedCallback } from 'use-debounce'
 import type { CreateNoteRequest } from '@/types/note'
+import css from './Notes.client.module.css'
 
 export default function NotesClient() {
   const [searchInput, setSearchInput] = useState('')
@@ -52,13 +53,15 @@ export default function NotesClient() {
   })
 
   return (
-    <div>
-      <header>
+    <div className={css.app}>
+      <header className={css.toolbar}>
         <SearchBox value={searchInput} onSearch={handleSearch} />
-        <button onClick={() => setIsModalOpen(true)}>Create note +</button>
+        <button className={css.button} onClick={() => setIsModalOpen(true)}>
+          Create note +
+        </button>
       </header>
 
-      {isLoading && <p>Loading, please wait...</p>}
+      {isLoading && <p className={css.loading}>Loading, please wait...</p>}
       {error && (
         <p>Could not fetch the list of notes. {(error as Error).message}</p>
       )}

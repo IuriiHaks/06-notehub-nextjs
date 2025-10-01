@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default async function NoteDetailsPage({ params }: Props) {
-  const id = params.id
+  const id = params
   const queryClient = new QueryClient()
 
   await queryClient.prefetchQuery({
@@ -19,8 +19,7 @@ export default async function NoteDetailsPage({ params }: Props) {
 
   return (
     <TanStackProvider dehydratedState={dehydrate(queryClient)}>
-      <NoteDetailsClient id={id} />
-      {/* <NoteClient id={id} /> */}
+      <NoteDetailsClient id={id} /> {/* <NoteClient id={id} /> */}
     </TanStackProvider>
   )
 }

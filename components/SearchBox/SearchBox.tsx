@@ -11,6 +11,7 @@ interface Props {
 export default function SearchBox({ value, onSearch }: Props) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     onSearch(e.target.value)
+
   return (
     <input
       className={css.input}
