@@ -8,9 +8,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createNote } from '@/lib/api'
 
 interface NoteFormProps {
-  onSubmit: (payload: CreateNoteRequest) => void
-  onSuccess?: () => void
-  onCancel?: () => void
+  onSubmit?: (payload: CreateNoteRequest) => void
+  onSuccess: () => void
+  onCancel: () => void
 }
 
 const tagOptions: NoteTag[] = [
@@ -27,25 +27,17 @@ const schema = Yup.object({
   tag: Yup.mixed<NoteTag>().oneOf(tagOptions).required('Required'),
 })
 
-// export default function NoteForm({
-// onSubmit,
-// onSuccess,
-// onCancel,
-// }: NoteFormProps) {
-//   const initialValues: CreateNoteRequest = {
-//     title: '',
-//     content: '',
-//     tag: 'Todo',
-//   }
-// }
-
-export default function NoteForm({ onSuccess }: NoteFormProps) {
+export default function NoteForm({
+  onSubmit,
+  onSuccess,
+  onCancel,
+}: NoteFormProps) {
   const queryClient = useQueryClient()
   const mutation = useMutation({
     mutationFn: (values: CreateNoteRequest) => createNote(values),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] })
-      onSuccess?.()
+      onSuccess()
     },
   })
 
@@ -55,11 +47,12 @@ export default function NoteForm({ onSuccess }: NoteFormProps) {
     <Formik<CreateNoteRequest>
       initialValues={{ title: '', content: '', tag: 'Todo' }}
       validationSchema={schema}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        // onSubmit(values)
-        // setSubmitting(false)
-        // onSuccess?.()
-        mutation.mutate(values, { onSettled: () => setSubmitting(false) })
+      onSubmit={(values, { resetForm }) => {
+        if (onSubmit) {
+          onSubmit(values) // 🔹 Використовуємо проп, якщо переданий
+        } else {
+          mutation.mutate(values)
+        }
         resetForm()
       }}
     >
@@ -103,7 +96,7 @@ export default function NoteForm({ onSuccess }: NoteFormProps) {
             <button
               type="button"
               className={css.cancelButton}
-              onClick={() => onSuccess?.()}
+              onClick={onCancel}
             >
               Cancel
             </button>
