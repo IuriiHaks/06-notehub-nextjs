@@ -11,9 +11,6 @@ interface NoteListProps {
   onDelete: (id: string) => void
 }
 
-// export default function NoteList({ notes, onDelete }: Props) {
-//   if (!notes.length) return <p>No notes yet</p>
-
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient()
 
