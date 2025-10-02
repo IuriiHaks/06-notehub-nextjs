@@ -58,7 +58,7 @@ interface ModalProps {
   children: React.ReactNode
 }
 
-const modalRoot = document.getElementById('modal-root') ?? document.body
+// const modalRoot = document.getElementById('modal-root') ?? document.body
 
 export default function Modal({ onClose, children }: ModalProps) {
   useEffect(() => {
@@ -92,6 +92,7 @@ export default function Modal({ onClose, children }: ModalProps) {
     >
       <div className={css.modal}>{children}</div>
     </div>,
-    modalRoot
+    // modalRoot
+    document.body
   )
 }
