@@ -3,14 +3,30 @@
 import Link from 'next/link'
 import css from './NoteList.module.css'
 import type { Note } from '@/types/note'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deleteNote } from '@/lib/api'
 
-interface Props {
+interface NoteListProps {
   notes: Note[]
-  onDelete: (id: string) => void
+  // onDelete: (id: string) => void
 }
 
-export default function NoteList({ notes, onDelete }: Props) {
-  if (!notes.length) return <p>No notes yet</p>
+// export default function NoteList({ notes, onDelete }: Props) {
+//   if (!notes.length) return <p>No notes yet</p>
+
+export default function NoteList({ notes }: NoteListProps) {
+  const queryClient = useQueryClient()
+
+  const deleteNoteMutation = useMutation({
+    mutationFn: (noteid: string) => deleteNote(noteid),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] }) // Оновлення списку нотаток
+    },
+  })
+
+  const handleDelete = (noteid: string) => {
+    deleteNoteMutation.mutate(noteid)
+  }
 
   return (
     <ul className={css.list}>
@@ -21,7 +37,10 @@ export default function NoteList({ notes, onDelete }: Props) {
           <div className={css.footer}>
             <span className={css.tag}>{note.tag}</span>
             <Link href={`/notes/${note.id}`}>View details</Link>
-            <button className={css.button} onClick={() => onDelete(note.id)}>
+            <button
+              className={css.button}
+              onClick={() => handleDelete(note.id)}
+            >
               Delete
             </button>
           </div>

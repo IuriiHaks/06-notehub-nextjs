@@ -4,8 +4,10 @@ import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import css from './NoteForm.module.css'
 import type { CreateNoteRequest, NoteTag } from '@/types/note'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { createNote } from '@/lib/api'
 
-interface Props {
+interface NoteFormProps {
   onSubmit: (payload: CreateNoteRequest) => void
   onSuccess?: () => void
   onCancel?: () => void
@@ -25,21 +27,40 @@ const schema = Yup.object({
   tag: Yup.mixed<NoteTag>().oneOf(tagOptions).required('Required'),
 })
 
-export default function NoteForm({ onSubmit, onSuccess, onCancel }: Props) {
-  const initialValues: CreateNoteRequest = {
-    title: '',
-    content: '',
-    tag: 'Todo',
-  }
+// export default function NoteForm({
+// onSubmit,
+// onSuccess,
+// onCancel,
+// }: NoteFormProps) {
+//   const initialValues: CreateNoteRequest = {
+//     title: '',
+//     content: '',
+//     tag: 'Todo',
+//   }
+// }
+
+export default function NoteForm({ onSuccess }: NoteFormProps) {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (values: CreateNoteRequest) => createNote(values),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] })
+      onSuccess?.()
+    },
+  })
+
+  // const initial = { title: '', content: '', tag: 'Todo' }
 
   return (
-    <Formik
-      initialValues={initialValues}
+    <Formik<CreateNoteRequest>
+      initialValues={{ title: '', content: '', tag: 'Todo' }}
       validationSchema={schema}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values)
-        setSubmitting(false)
-        onSuccess?.()
+      onSubmit={(values, { setSubmitting, resetForm }) => {
+        // onSubmit(values)
+        // setSubmitting(false)
+        // onSuccess?.()
+        mutation.mutate(values, { onSettled: () => setSubmitting(false) })
+        resetForm()
       }}
     >
       {({ isSubmitting }) => (
@@ -82,7 +103,7 @@ export default function NoteForm({ onSubmit, onSuccess, onCancel }: Props) {
             <button
               type="button"
               className={css.cancelButton}
-              onClick={() => onCancel?.()}
+              onClick={() => onSuccess?.()}
             >
               Cancel
             </button>
