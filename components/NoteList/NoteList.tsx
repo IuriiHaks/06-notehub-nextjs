@@ -8,7 +8,7 @@ import { deleteNote } from '@/lib/api'
 
 interface NoteListProps {
   notes: Note[]
-  // onDelete: (id: string) => void
+  onDelete: (id: string) => void
 }
 
 // export default function NoteList({ notes, onDelete }: Props) {
