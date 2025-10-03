@@ -4,7 +4,7 @@ import TanStackProvider from '@/components/TanStackProvider/TanStackProvider'
 import NoteDetailsClient from './NoteDetails.client'
 
 interface Props {
-  params: { id: string } // просто об'єкт, не Promise
+  params: Promise<{ id: string }>
 }
 
 export default async function NoteDetailsPage({ params }: Props) {
