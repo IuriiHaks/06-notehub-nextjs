@@ -7,7 +7,7 @@ import {
   useMutation,
   keepPreviousData,
 } from '@tanstack/react-query'
-import { fetchNotes, createNote, deleteNote } from '@/lib/api'
+import { fetchNotes, createNote } from '@/lib/api'
 import NoteList from '@/components/NoteList/NoteList'
 import SearchBox from '@/components/SearchBox/SearchBox'
 import Pagination from '@/components/Pagination/Pagination'
@@ -28,7 +28,7 @@ export default function NotesClient() {
   const debouncedSetQuery = useDebouncedCallback((value: string) => {
     setQuery(value)
     setPage(1)
-  }, 300)
+  }, 500)
 
   const handleSearch = (value: string) => {
     setSearchInput(value)
@@ -46,10 +46,10 @@ export default function NotesClient() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
   })
 
-  const deleteMutation = useMutation({
-    mutationFn: (id: string) => deleteNote(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
-  })
+  // const deleteMutation = useMutation({
+  //   mutationFn: (id: string) => deleteNote(id),
+  //   onSuccess: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
+  // })
 
   return (
     <div className={css.app}>
@@ -65,12 +65,13 @@ export default function NotesClient() {
         <p>Could not fetch the list of notes. {(error as Error).message}</p>
       )}
 
-      {data && data.notes.length > 0 && (
+      {data && data.notes.length > 0 && <NoteList notes={data.notes} />}
+      {/* {data && data.notes.length > 0 && (
         <NoteList
           notes={data.notes}
           onDelete={(id) => deleteMutation.mutate(id)}
         />
-      )}
+      )} */}
 
       {data && data.totalPages > 1 && (
         <Pagination
